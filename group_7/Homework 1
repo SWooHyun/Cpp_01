@@ -1,0 +1,84 @@
+main.cpp
+
+#include<iostream>
+using namespace std;
+
+#include "Ram.h"
+
+int main() {
+    Ram ram;
+    ram.write(100, 20); // 100 번지에 20 저장 
+    ram.write(101, 30); // 101 번지에 30 저장 
+    char res = ram.read(100) + ram.read(101); // 20 + 30 = 50
+    ram.write(102, res); // 102 번지에 50 저장 
+    cout << "102 번지의 값 = " << (int)ram.read(102) << endl; // 102 번지 값 출력 
+}
+
+
+ram.cpp
+
+
+
+#include<iostream>
+#include<memory.h>
+using namespace std;
+
+#include "Ram.h"
+
+Ram::Ram() {
+    size = 100 * 1024;
+    for (int i = 0; i < size; ++i)
+        mem[i] = 0;
+}
+Ram::~Ram() {
+    cout << "메모리 제거됨";
+}
+char Ram::read(int address) {
+    return mem[address];
+}
+void Ram::write(int address, char value) {
+    mem[address] = value;
+}
+
+Ram.h
+
+#pragma once
+class Ram {
+    char mem[100 * 1024]; // 100KB 메모리. 한 번지는 한 바이트이므로 char 타입 사용 
+    int size;
+public:
+    Ram(); // mem 배열을 0으로 초기화하고 size를 100*1024로 초기화 
+    ~Ram(); // "메모리 제거됨" 문자열 출력 
+    char read(int address);    // address 주소의 메모리 바이트 리턴 
+    void write(int address, char value); // address 주소에 한 바이트로 value 저장 
+};
+
+
+
+
+Ram.h 파일: Ram 클래스를 선언
+int size 멤버 변수는 현재 메모리의 크기를 저장
+Ram 클래스에는 기본 생성자(Ram())와 소멸자(~Ram())가 정의되어 있다
+char read(int address) 함수는 주어진 메모리 주소(address)에서 바이트를 읽어 반환한다
+void write(int address, char value) 함수는 주어진 메모리 주소(address)에 지정된 값을 한 바이트로 저장한다
+
+Ram.cpp 파일:Ram 클래스의 멤버 함수들의 정의가 포함되어 있다
+
+main.cpp 파일: 프로그램의 진입점인 main 함수가 정의되어 있다
+Ram 클래스의 객체 ram을 생성한다
+ram 객체를 사용하여 메모리 주소 100에 20을 쓰고 메모리 주소 101에 30을 쓴다
+그런 다음 메모리 주소 100과 101에서 읽은 값을 더하여 결과를 res에 저장합니다.
+res 값을 메모리 주소 102에 쓴다.
+마지막으로 메모리 주소 102에서 값을 읽어 출력한다
+
+처음에는 어떻게 해야할지 몰라서 과제를 보며 공부했었다
+그후 조원과 함께 인터넷을 통해 더 공부를 해봐야 겠다고 생각을 하여 인터넷에서 이번 과제와 관련된 내용들을 공부하면서 위의 코드를 이용하여 과제를 할 수 있게 되었다
+
+
+
+
+
+
+
+
+
