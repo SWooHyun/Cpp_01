@@ -1,3 +1,4 @@
+***************************************************************************************
 main.cpp
 
 #include<iostream>
@@ -13,11 +14,8 @@ int main() {
     ram.write(102, res); // 102 번지에 50 저장 
     cout << "102 번지의 값 = " << (int)ram.read(102) << endl; // 102 번지 값 출력 
 }
-
-
+***************************************************************************************
 ram.cpp
-
-
 
 #include<iostream>
 #include<memory.h>
@@ -39,7 +37,7 @@ char Ram::read(int address) {
 void Ram::write(int address, char value) {
     mem[address] = value;
 }
-
+***************************************************************************************
 Ram.h
 
 #pragma once
@@ -52,23 +50,19 @@ public:
     char read(int address);    // address 주소의 메모리 바이트 리턴 
     void write(int address, char value); // address 주소에 한 바이트로 value 저장 
 };
-
-
+***************************************************************************************
 
 
 Ram.h 파일: Ram 클래스를 선언 한 파일
-int size 멤버 변수는 현재 메모리의 크기를 저장하는 변수이다
-Ram 클래스에는 기본 생성자(Ram())와 소멸자(~Ram())가 정의되어 있다
-char read(int address) 함수는 주어진 메모리 주소(address)에서 바이트를 읽어 반환한다
-void write(int address, char value) 함수는 주어진 메모리 주소(address)에 지정된 값을 한 바이트로 저장한다
+int size 멤버 변수는 현재 메모리의 크기를 저장하는 변수이며 Ram 클래스에는 기본 생성자(Ram())와 소멸자(~Ram())가 정의되어 있다
+char read(int address) 함수는 주어진 메모리 주소(address)에서 바이트를 읽어 반환하고 void write(int address, char value) 함수는 주어진 메모리 주소(address)에 지정된 값을 한 바이트로 저장한다
 
 Ram.cpp 파일:Ram 클래스의 멤버 함수들의 정의가 포함되어 있다
 
 main.cpp 파일: 프로그램의 진입점인 main 함수가 정의되어 있다
-Ram 클래스의 객체 ram을 생성한다
-ram 객체를 사용하여 메모리 주소 100에 20을 쓰고 메모리 주소 101에 30을 쓴다
+Ram 클래스의 객체 ram을 생성한다 그 후 ram 객체를 사용하여 메모리 주소 100에 20을 쓰고 메모리 주소 101에 30을 쓴다
 그런 다음 메모리 주소 100과 101에서 읽은 값을 더하여 결과를 res에 저장한다
-res 값을 메모리 주소 102에 쓴다
+저장한 res 값을 메모리 주소 102에 쓴다
 마지막으로 메모리 주소 102에서 값을 읽어 출력한다
 
 처음에는 어떻게 해야할지 몰라서 교제를 보며 공부했었다
