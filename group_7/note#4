@@ -45,3 +45,14 @@ c = a + b; // c = VIOLET. a, b의 두 색을 섞은 새로운 Color 객체 c
 SortedArray a(2,5,9), b(3,7,10), c;
 c = a + b; // c = {2,3,5,7,9,10}. 정렬된 두 배열을 결합한(merge) 새로운 배열 생성
 
+class Power { // 에너지를 표현하는 파워 클래스
+int kick; // 발로 차는 힘
+int punch; // 주먹으로 치는 힘
+public:
+Power(int kick=0, int punch=0) {
+this->kick = kick;
+this->punch = punch;
+}
+}; 
+
+앞으로 연산자 함수 작성에 쓸 클래스 강조
