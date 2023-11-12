@@ -1,0 +1,91 @@
+상속의 목적 밑 장점
+
+1. 간결한 클래스 작성
+ 기본 클래스의 기능을 물려받아 파생 클래스를 간결하게 작성
+2. 클래스 간의 계층적 분류 및 관리의 용이함
+ 상속은 클래스들의 구조적 관계 파악 용이
+3. 클래스 재사용과 확장을 통한 소프트웨어 생산성 향상
+ 빠른 소프트웨어 생산 필요
+ 기존에 작성한 클래스의 재사용 – 상속
+ 상속받아 새로운 기능을 확장
+ 앞으로 있을 상속에 대비한 클래스의 객체 지향적 설계 필요
+
+상속 선언
+class Student : public Person { 
+// Person을 상속받는 Student 선언
+.....
+};
+class StudentWorker : public Student { 
+// Student를 상속받는 StudentWorker 선언
+.....
+};
+
+ Student 클래스는 Person 클래스의 멤버를 물려받는다.
+ StudentWorker 클래스는 Student의 멤버를 물려받는다.
+ Student가 물려받은 Person의 멤버도 함께 물려받는다.
+
+ 업 캐스팅(up-casting)
+ 파생 클래스 포인터가 기본 클래스 포인터에 치환되는 것
+ 예) 사람을 동물로 봄
+
+int main() {
+ColorPoint cp;
+ColorPoint *pDer = &cp;
+Point* pBase = pDer; // 업캐스팅
+pDer->set(3,4); 
+pBase->showPoint(); 
+pDer->setColor("Red");
+pDer->showColorPoint(); 
+pBase->showColorPoint(); // 컴파일 오류
+}
+
+int x 3
+int y 4
+void set() {...}
+void showPoint() {...}
+string color
+void showColorPoint() { ... }
+void setColor () {...}
+pBase 포인터로기본 클래스의
+public 멤버만 접근 가능
+
+다운 캐스팅(down-casting)
+ 기본 클래스의 포인터가 파생 클래스의 포인터에 치환되는 것
+
+int main() {
+ColorPoint cp;
+ColorPoint *pDer;
+Point* pBase = &cp; // 업캐스팅
+pBase->set(3,4); 
+pBase->showPoint(); 
+pDer = (ColorPoint *)pBase; // 다운캐스팅
+pDer->setColor("Red"); // 정상 컴파일
+pDer->showColorPoint(); // 정상 컴파일
+}
+(3,4)
+Red(3,4)
+
+int x 3
+int y 4
+void set() {...}
+void showPoint() {...}
+string color
+void showColorPoint() { ... }
+
+
+접근 지정자
+ private 멤버
+ 선언된 클래스 내에서만 접근 가능
+ 파생 클래스에서도 기본 클래스의 private 멤버 직접 접근 불가
+ public 멤버
+ 선언된 클래스나 외부 어떤 클래스, 모든 외부 함수에 접근 허용
+ 파생 클래스에서 기본 클래스의 public 멤버 접근 가능
+ protected 멤버
+ 선언된 클래스에서 접근 가능
+ 파생 클래스에서만 접근 허용
+ 파생 클래스가 아닌 다른 클래스나 외부 함수에서는 protected 멤버를 접근할 수 없다
+
+소멸자의 실행 순서
+ 파생 클래스의 객체가 소멸될 때
+ 파생 클래스의 소멸자가 먼저 실행되고
+ 기본 클래스의 소멸자가 나중에 실행
