@@ -1,0 +1,248 @@
+homework2 코드
+#include <iostream>
+#include <string>
+using namespace std;
+
+class Shape {
+	Shape* next;
+protected:
+	virtual void draw() = 0;
+public:
+	Shape() { next = NULL; }
+	virtual ~Shape() { }
+	void paint() { draw(); }
+	Shape* add(Shape* p) { this->next = p; return p; }
+	Shape* getNext() { return next; }
+	void setNext(Shape* p) { this->next = p->next; }
+};
+class Circle : public Shape {
+protected:
+	virtual void draw() {
+		cout << "Circle" << endl;
+	}
+};
+class Rect : public Shape {
+protected:
+	virtual void draw() {
+		cout << "Rectangle" << endl;
+	}
+};
+class Line : public Shape {
+protected:
+	virtual void draw() {
+		cout << "Line" << endl;
+	}
+};
+
+class UI {
+public:
+	static int main_memu() {
+		int n;
+		cout << "삽입:1, 삭제:2, 모두보기:3, 종료:4 >> ";
+		cin >> n;
+		return n;
+	}
+	static int one_menu() {
+		int n;
+		cout << "선:1, 원:2, 사각형:3 >> ";
+		cin >> n;
+		return n;
+	}
+	static int two_menu() {
+		int n;
+		cout << "삭제하고자 하는 도형의 인덱스 >> ";
+		cin >> n;
+		return n;
+	}
+};
+
+class GraphicEditor {
+	Shape* pStart;
+	Shape* pLast;
+	int count;
+public:
+	GraphicEditor() { pStart = NULL; count = 0; }
+	void create(int num) {
+		switch (num) {
+		case 1:
+			if (count == 0) {
+				pStart = new Line();
+				pLast = pStart;
+			}
+			else
+				pLast = pLast->add(new Line());
+			count++;
+			break;
+
+		case 2:
+			if (count == 0) {
+				pStart = new Circle();
+				pLast = pStart;
+			}
+			else
+				pLast = pLast->add(new Circle());
+			count++;
+			break;
+
+		case 3:
+			if (count == 0) {
+				pStart = new Rect();
+				pLast = pStart;
+			}
+			else
+				pLast = pLast->add(new Rect());
+			count++;
+			break;
+
+		}
+	}
+	void indelete(int num) {
+		Shape* p = pStart;
+		Shape* del = pStart;
+
+		if (num < count) {
+			for (int i = 0; i < num; i++) {
+				p = del;
+				del = del->getNext();
+			}
+			if (num == 0)
+				pStart = p->getNext();
+			else
+				p->setNext(del);
+			count--;
+			if (count == 1) pLast = pStart;
+			delete del;
+
+		}
+		else
+			cout << "인덱스를 잘못 입력하셨습니다." << endl;
+	}
+	void call() {
+		bool exit = true;
+		cout << "그래픽 에디터입니다." << endl;
+		while (exit) {
+			switch (UI::main_memu()) {
+			case 1:
+				create(UI::one_menu());
+				break;
+			case 2:
+				indelete(UI::two_menu());
+				break;
+			case 3: {
+				Shape* p = pStart;
+				for (int i = 0; i < count; i++) {
+					cout << i << ": "; p->paint();
+					p = p->getNext();
+				}
+				break;
+			}
+			case 4:
+				exit = false;
+				break;
+
+			}
+		}
+	}
+};
+
+int main() {
+	GraphicEditor* editor = new GraphicEditor;
+	editor->call();
+	delete editor;
+}
+
+
+정리노트
+
+가상 함수(virtual function)
+ virtual 키워드로 선언된 멤버 함수
+ virtual 키워드의 의미
+ 동적 바인딩 지시어
+ 컴파일러에게 함수에 대한 호출 바인딩을 실행 시간까지 미루도록 지시
+class Base {
+public:
+virtual void f(); // f()는 가상 함수
+};
+
+ 함수 오버라이딩(function overriding)
+ 파생 클래스에서 기본 클래스의 가상 함수와 동일한 이름의 함수 선
+언
+ 기본 클래스의 가상 함수의 존재감 상실시킴
+ 파생 클래스에서 오버라이딩한 함수가 호출되도록 동적 바인딩
+ 함수 재정의라고도 부름
+ 다형성의 한 종류
+
+함수 재정의라는 용어를 사용할 때 신중을 기해야 한다. 가상 함수를 재정의하는 경우와
+아닌 경우에 따라 프로그램의 실행이 완전히 달라지기 때문이다 
+가상 함수를 재정의하는 오버라이딩의 경우 함수가 호출되는 실행 시간에 동적 바인딩
+이 일어나지만, 그렇지 않은 경우 컴파일 시간에 결정된 함수가 단순히 호출된다(정적
+바인딩). 
+저자는 가상 함수를 재정의하는 것을 오버라이딩으로, 그렇지 않는 경우를 함수 재정의
+로 구분하고자 한다.
+Java의 경우 이런 혼란은 없다. 멤버 함수가 가상이냐 아니냐로 구분되지 않으며, 함수
+재정의는 곧 오버라이딩이며, 무조건 동적 바인딩이 일어난다
+
+동적 바인딩
+ 파생 클래스에 대해
+ 기본 클래스에 대한 포인터로 가상 함수를 호출하는 경우
+ 객체 내에 오버라이딩한 파생 클래스의 함수를 찾아 실행
+
+
+
+C++ 오버라이딩의 특징
+ 오버라이딩의 성공 조건
+ 가상 함수 이름, 매개 변수 타입과 개수, 리턴 타입이 모두 일치
+ 오버라이딩 시 virtual 지시어 생략 가능
+ 가상 함수의 virtual 지시어는 상속됨, 파생 클래스에서 virtual 생략 가능
+ 가상 함수의 접근 지정
+ private, protected, public 중 자유롭게 지정 가능
+12
+class Base {
+public:
+virtual void fail(); 
+virtual void success(); 
+virtual void g(int);
+};
+class Derived : public Base {
+public:
+virtual int fail(); // 오버라이딩 실패. 리턴 타입이 다름
+virtual void success(); // 오버라이딩 성공
+virtual void g(int, double); // 오버로딩 사례. 정상 컴파일
+};
+class Base {
+public:
+virtual void f();
+};
+class Derived : public Base {
+public:
+virtual void f(); // virtual void f()와 동일한 선언
+
+
+
+오버라이딩과 범위 지정 연산자(::)
+ 범위 지정 연산자(::)
+ 정적 바인딩 지시
+ 기본클래스::가상함수() 형태로 기본 클래스의 가상 함수를 정적
+바인딩으로 호출
+ Shape::draw();
+
+기본 클래스의 포인터 활용
+ 기본 클래스의 포인터로 파생 클래스 접근
+ pStart, pLast, p의 타입이 Shape*
+ 링크드 리스트를 따라 Shape을 상속받은 파생 객체들 접근
+ p->paint()의 간단한 호출로 파생 객체에 오버라이딩된 draw() 
+함수 호출
+
+추상 클래스
+ 추상 클래스 : 최소한 하나의 순수 가상 함수를 가진 클래스
+ 추상 클래스의 특징
+ 온전한 클래스가 아니므로 객체 생성 불가능
+ 추상 클래스의 포인터는 선언 가능
+
+추상 클래스의 목적
+ 추상 클래스의 목적
+ 추상 클래스의 인스턴스를 생성할 목적 아님
+ 상속에서 기본 클래스의 역할을 하기 위함
+ 순수 가상 함수를 통해 파생 클래스에서 구현할 함수의 형태(원형)을
+보여주는 인터페이스 역할
+ 추상 클래스의 모든 멤버 함수를 순수 가상 함수로 선언할 필요 없음
